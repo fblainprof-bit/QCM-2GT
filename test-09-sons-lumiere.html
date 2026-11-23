@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TEST n°009 · Sons et lumière</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#16231e;--mute:#5b6b64;--line:#d5dfda;--acc:#0f766e;--acc-ink:#fff;--ok:#157347;--okbg:#e3f4ea;--ko:#b3261e;--kobg:#fbe7e5;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1916;--card:#172420;--ink:#e8f1ed;--mute:#97aaa2;--line:#2b3f38;--acc:#2dd4bf;--acc-ink:#04201c;--ok:#5fd68f;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1b19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1916;--card:#172420;--ink:#e8f1ed;--mute:#97aaa2;--line:#2b3f38;--acc:#2dd4bf;--acc-ink:#04201c;--ok:#5fd68f;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1b19;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;font-size:18px;line-height:1.5}
+main{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.7rem;line-height:1.15;margin:0 0 4px}
+p{margin:0 0 14px}
+.mute{color:var(--mute);font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+label{display:block;font-weight:700;margin:14px 0 6px}
+input[type=text],input[type=password],select{width:100%;font:inherit;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+input:focus,select:focus,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:13px 22px;font-weight:700;min-height:48px;width:100%;margin-top:18px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sec{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.tools{display:flex;gap:10px;margin:-4px 0 14px}.tools .btn{margin:0;width:auto;flex:1;padding:9px 12px;min-height:42px;font-size:.95rem}
+#calc{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:680px;background:var(--card);border-top:3px solid var(--acc);border-radius:16px 16px 0 0;padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:40;-webkit-user-select:none;user-select:none}#calc.hide{display:none}#calc .btn{margin-top:0}.cd{font-size:1.8rem;font-weight:700;text-align:right;min-height:2.4rem;overflow-x:auto;white-space:nowrap}.ch{text-align:right;color:var(--mute);font-size:.9rem;min-height:1.2rem;overflow-x:auto;white-space:nowrap}.ck{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.ck button{padding:10px 0;font-size:1.15rem;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}.ck button.op{border-color:var(--acc)}.ck button.eq{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 18px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .25s}
+.q{font-size:1.2rem;font-weight:700;line-height:1.35;margin-bottom:16px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;min-height:52px}
+.opt b{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--mute);display:grid;place-items:center;font-size:.85rem}
+.opt.sel{border-color:var(--acc);background:var(--card);box-shadow:inset 0 0 0 1px var(--acc)}
+.opt.sel b{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+#qr{display:flex;justify-content:center;margin:18px 0}
+#qr>div{background:#fff;padding:14px;border-radius:10px;line-height:0}
+.alert{font-weight:700;font-size:1.15rem}
+.note{border-left:6px solid var(--acc);padding:10px 14px;background:var(--bg);border-radius:0 10px 10px 0;margin-top:14px;font-size:.95rem}
+#s-quiz{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.tm{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:14px}.tm i{display:block;height:100%;background:var(--ko);transition:width 1s linear}#warn{position:fixed;inset:0;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px;z-index:50}#warn.hide{display:none}#warn .card{max-width:420px;border:4px solid var(--ko);text-align:center}#warn .alert{color:var(--ko);font-size:1.4rem}@keyframes pulse{50%{background:rgba(179,38,30,.92)}}#warn{animation:pulse .8s infinite}@media (prefers-reduced-motion:reduce){#warn{animation:none}}@media print{body{display:none}}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<section id="s-id" class="card">
+  <p class="mute" id="by"></p>
+  <h1 id="title"></h1>
+  <p class="mute" id="meta"></p>
+  <label for="nom">NOM</label>
+  <input type="text" id="nom" autocomplete="family-name">
+  <label for="prenom">PRÉNOM</label>
+  <input type="text" id="prenom" autocomplete="given-name">
+  <label for="classe">CLASSE</label>
+  <select id="classe"><option value="">— Choisir —</option></select>
+  <label for="mdp">MOT DE PASSE DU TEST</label>
+  <input type="password" id="mdp" autocomplete="off" placeholder="Donné par ton enseignant">
+  <p class="mute" id="mdpmsg" style="margin:6px 0 0"></p>
+  <p class="note" id="net" style="font-weight:700"></p>
+  <details class="mute" style="margin-top:10px"><summary>Mon appareil indique toujours « connecté »</summary><label for="dcode">Code de l’enseignant</label><input type="text" id="dcode" autocomplete="off"><button class="btn" id="dg" type="button">Valider</button></details>
+  <button class="btn" id="go" disabled>Commencer</button>
+</section>
+
+<section id="s-quiz" class="hide">
+  <div class="mute" id="count"></div>
+  <div class="bar"><i id="fill"></i></div>
+  <div class="tm hide" id="tmw"><i id="tm"></i></div>
+  <div class="card">
+    <div class="q" id="q"></div>
+    <div class="tools"><button class="btn sec" id="speak" type="button">🔊 Écouter</button><button class="btn sec" id="calcb" type="button">🧮 Calculatrice</button></div>
+    <div id="opts"></div>
+    <button class="btn" id="next">Question suivante</button>
+  </div>
+</section>
+
+<section id="s-qr" class="hide">
+  <div class="card">
+    <p class="alert">Montre ce QR-CODE à ton enseignant avant de continuer !</p>
+    <div id="qr"></div>
+    <p class="mute" id="qrwho"></p>
+    <button class="btn" id="suivant">Suivant</button>
+  </div>
+</section>
+
+<section id="s-pdf" class="hide">
+  <div class="card">
+    <h1 style="font-size:1.3rem">Ta copie</h1>
+    <button class="btn" id="pdf" style="margin-top:6px">GÉNÉRER TA COPIE EN PDF</button>
+    <p class="note">Tu peux maintenant réactiver ton Wi-Fi. Envoie ce PDF par mail à <b id="mail"></b> en pièce jointe.<br><b>Attention ! Indique ton NOM, ton PRÉNOM et ta CLASSE dans le mail, et envoie le fichier depuis ta propre adresse mail.</b></p>
+    <p class="mute" id="msg" style="margin-top:12px"></p>
+    <details open style="margin-top:14px"><summary><b>Le PDF ne fonctionne pas ?</b></summary>
+      <p class="mute" style="margin-top:10px">Solution de secours : copie le texte de ta copie et colle-le dans un mail à l’enseignant, ou ouvre ton application mail avec le texte déjà préparé. Montre aussi ton QR-code.</p>
+      <button class="btn" id="cpy" style="margin-top:6px">Copier le texte de ma copie</button>
+      <a class="btn" id="ml" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:10px">Ouvrir mon application mail</a>
+    </details>
+  </div>
+</section>
+</main>
+<div id="calc" class="hide" role="dialog" aria-label="Calculatrice"><div class="ch" id="ch"></div><div class="cd" id="cd">0</div><div class="ck" id="ck"></div><button class="btn sec" id="cx" type="button">Fermer la calculatrice</button></div>
+<div id="warn" class="hide"><div class="card"><p class="alert" id="warnt"></p><p id="warnm"></p><button class="btn" id="warnb">Reprendre le test</button></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ====== À MODIFIER ====== */
+const NUMERO = "009";
+const CHAPITRE = "Sons et lumière";
+const AUTEUR = "Physique-Chimie";
+const ETABLISSEMENT = "La Joliverie";
+const VERSION = "16/11/2026";
+const EMAIL = "fblainprof@gmail.com";
+const CLASSES = ["2NDE-1","2NDE-2","2NDE-3","2NDE-4","2NDE-5","2NDE-6","1TSBAT","2TSBAT","1TSMV","2TSMV"];
+const NB_QUESTIONS = 10;   /* nombre de questions tirées au sort dans la banque pour chaque élève */
+const MAX_SORTIES = 3;     /* le test s’arrête à cette sortie (les précédentes déclenchent une alerte) */
+const DUREE_QUESTION = 90; /* secondes par question (0 = pas de limite) */
+const RESEAU_COUPE_OBLIGATOIRE = true; /* true : l’élève doit être hors réseau (mode avion) pour commencer ; une reconnexion pendant le test est sanctionnée */
+const CODE_DEROGATION = "PROF-2026"; /* code à saisir par vous si un appareil se dit « connecté » alors que le mode avion est activé */
+const MOT_DE_PASSE_ACTIF = true; /* true : mot de passe obligatoire pour commencer ; seules ses empreintes sont dans la page */
+const MDP_SHA256 = "37bf6b7b749ada8e3b9af45cc718cc8afdba1ae4bb9f3052bff7adab5b4b5165";
+const MDP_FNV = 4007209424;
+const VOCAL = true;         /* bouton 🔊 qui lit la question et les réponses à voix haute */
+const CALCULATRICE = true;  /* calculatrice intégrée, disponible pendant le test */
+const MELANGER_REPONSES = true;
+/* q = énoncé (HTML accepté), o = propositions, r = indice de la bonne réponse (à partir de 0), e = explication */
+const QUESTIONS = [
+ {"q": "Un son est produit par…", "o": ["la vibration d’un objet", "une lumière", "une force électrique", "un courant"], "r": 0, "e": "La vibration se propage dans l’air."},
+ {"q": "Le son se propage…", "o": ["dans un milieu matériel, pas dans le vide", "dans le vide uniquement", "uniquement dans l’eau", "à la vitesse de la lumière"], "r": 0, "e": "Il lui faut de la matière."},
+ {"q": "Quelle est la valeur approchée de la vitesse du son dans l’air ?", "o": ["340 m/s", "3,00 × 10<sup>8</sup> m/s", "34 m/s", "3 400 m/s"], "r": 0, "e": "Environ 340 m/s."},
+ {"q": "Quelle est la valeur approchée de la vitesse de la lumière dans le vide ?", "o": ["3,00 × 10<sup>8</sup> m/s", "3,00 × 10<sup>5</sup> m/s", "340 m/s", "3,00 × 10<sup>8</sup> km/h"], "r": 0, "e": "c ≈ 3,00 × 10<sup>8</sup> m/s."},
+ {"q": "Quelle est l’unité de la fréquence ?", "o": ["Le hertz", "Le décibel", "Le newton", "La seconde"], "r": 0, "e": "1 Hz = 1 s<sup>-1</sup>."},
+ {"q": "Quelle est la relation entre fréquence f et période T ?", "o": ["f = 1 / T", "f = T", "f = T / 2", "f = 2 T"], "r": 0, "e": "f en Hz, T en s."},
+ {"q": "Quelle est l’unité de la période T ?", "o": ["La seconde", "Le hertz", "Le mètre", "Le volt"], "r": 0, "e": "La période est une durée."},
+ {"q": "Quel est le domaine des fréquences audibles ?", "o": ["De 20 Hz à 20 000 Hz", "De 1 Hz à 100 Hz", "De 20 kHz à 20 MHz", "De 0 à 20 Hz"], "r": 0, "e": "Pour une oreille humaine jeune."},
+ {"q": "Que sont les ultrasons ?", "o": ["Des sons de fréquence supérieure à 20 000 Hz", "Des sons de fréquence inférieure à 20 Hz", "Des sons de la lumière visible", "Des sons très faibles"], "r": 0, "e": "Ils sont inaudibles."},
+ {"q": "Quelle est l’unité du niveau sonore ?", "o": ["Le décibel", "Le hertz", "Le watt", "Le newton"], "r": 0, "e": "Le niveau sonore se mesure en dB."},
+ {"q": "Un son aigu a…", "o": ["une fréquence élevée", "une fréquence faible", "une amplitude nulle", "une période longue"], "r": 0, "e": "Aigu = haute fréquence."},
+ {"q": "Un son fort a une amplitude…", "o": ["grande", "petite", "nulle", "constante"], "r": 0, "e": "L’amplitude est liée au volume."},
+ {"q": "Dans un milieu homogène et transparent, la lumière se propage…", "o": ["en ligne droite", "en courbe", "en zigzag", "elle ne se propage pas"], "r": 0, "e": "Propagation rectiligne."},
+ {"q": "D’après la loi de la réflexion, l’angle de réflexion est…", "o": ["égal à l’angle d’incidence", "le double", "nul", "toujours 90°"], "r": 0, "e": "i = r."},
+ {"q": "La réfraction est le changement de direction de la lumière…", "o": ["à la traversée d’une interface entre deux milieux", "sur un miroir", "dans le vide", "dans l’obscurité"], "r": 0, "e": "Elle dépend des deux milieux."},
+ {"q": "Un prisme décompose la lumière blanche en…", "o": ["un spectre continu de couleurs", "une seule couleur", "un spectre de raies", "noir"], "r": 0, "e": "C’est la dispersion."},
+ {"q": "Un spectre de raies provient d’une source qui…", "o": ["émet seulement certaines longueurs d’onde", "est un corps solide chaud", "émet de la lumière blanche", "est éteinte"], "r": 0, "e": "Typique d’un gaz chaud, il identifie les éléments."},
+ {"q": "Quel est le domaine des longueurs d’onde de la lumière visible ?", "o": ["De 400 nm à 800 nm", "De 1 nm à 10 nm", "De 1 µm à 100 µm", "De 1 mm à 1 m"], "r": 0, "e": "Du violet au rouge."},
+ {"q": "Une lentille convergente…", "o": ["fait converger les rayons lumineux", "disperse les rayons", "réfléchit la lumière", "absorbe toute la lumière"], "r": 0, "e": "Elle forme des images sur un écran."},
+ {"q": "Dans quel milieu le son se propage-t-il le plus vite ?", "o": ["Un solide", "L’air", "Le vide", "Un gaz léger"], "r": 0, "e": "Plus le milieu est rigide, plus il est rapide."},
+ {"q": "Quelle est la vitesse approchée du son dans l’eau ?", "o": ["1 500 m/s", "340 m/s", "3,0 × 10<sup>8</sup> m/s", "34 m/s"], "r": 0, "e": "Plus rapide que dans l’air."},
+ {"q": "Qu’est-ce qu’un écho ?", "o": ["Un son réfléchi qui revient", "Un son absorbé", "Un son plus aigu", "Un son inaudible"], "r": 0, "e": "Réflexion sur un obstacle."},
+ {"q": "On entend le tonnerre 3 s après l’éclair. À quelle distance est l’orage ?", "o": ["Environ 1 km", "Environ 100 m", "Environ 10 km", "Environ 3 km"], "r": 0, "e": "d = 340 × 3 ≈ 1 000 m."},
+ {"q": "Quelle est la période d’un son de fréquence 440 Hz ?", "o": ["2,3 ms", "440 s", "0,44 s", "4,4 s"], "r": 0, "e": "T = 1 / f."},
+ {"q": "Quelle est la fréquence d’un signal de période 0,01 s ?", "o": ["100 Hz", "0,01 Hz", "10 Hz", "1 000 Hz"], "r": 0, "e": "f = 1 / T."},
+ {"q": "À quoi sert un oscilloscope ?", "o": ["À visualiser un signal électrique", "À mesurer une masse", "À mesurer une température", "À produire un son"], "r": 0, "e": "Il affiche la tension en fonction du temps."},
+ {"q": "Un microphone convertit…", "o": ["un son en signal électrique", "un signal électrique en son", "une lumière en chaleur", "une chaleur en son"], "r": 0, "e": "Capteur sonore."},
+ {"q": "Un haut-parleur convertit…", "o": ["un signal électrique en son", "un son en signal électrique", "une lumière en chaleur", "une chaleur en lumière"], "r": 0, "e": "Actionneur sonore."},
+ {"q": "Que sont les infrasons ?", "o": ["Des sons de fréquence inférieure à 20 Hz", "Des sons de fréquence supérieure à 20 kHz", "Des sons visibles", "Des sons très forts"], "r": 0, "e": "Inaudibles pour l’humain."},
+ {"q": "Qu’est-ce qu’un son pur ?", "o": ["Un son de fréquence unique, sinusoïdal", "Un son de plusieurs fréquences", "Un bruit", "Un son inaudible"], "r": 0, "e": "Ex. : diapason."},
+ {"q": "Qu’est-ce qui distingue le timbre de deux instruments ?", "o": ["La présence d’harmoniques", "La hauteur seulement", "L’amplitude seulement", "La durée"], "r": 0, "e": "Forme du signal différente."},
+ {"q": "La hauteur d’un son est liée à…", "o": ["sa fréquence", "son amplitude", "sa durée", "sa température"], "r": 0, "e": "Aigu = fréquence élevée."},
+ {"q": "Quel niveau sonore correspond environ au seuil de douleur ?", "o": ["120 dB", "20 dB", "0 dB", "60 dB"], "r": 0, "e": "Très dangereux pour l’audition."},
+ {"q": "Une exposition prolongée à plus de 85 dB est…", "o": ["dangereuse pour l’audition", "sans danger", "bénéfique", "inaudible"], "r": 0, "e": "Risque de surdité."},
+ {"q": "La lumière visible est…", "o": ["une onde électromagnétique", "une onde sonore", "une onde mécanique", "un flux de particules massives"], "r": 0, "e": "Elle se propage dans le vide."},
+ {"q": "La lumière se propage-t-elle dans le vide ?", "o": ["Oui", "Non", "Seulement dans l’air", "Seulement dans l’eau"], "r": 0, "e": "C’est ce qui permet de voir le Soleil."},
+ {"q": "Comment obtient-on du blanc par synthèse additive ?", "o": ["En superposant rouge, vert et bleu", "En mélangeant des peintures", "En supprimant la lumière", "Avec du noir"], "r": 0, "e": "Synthèse additive de lumières."},
+ {"q": "Un filtre rouge laisse passer…", "o": ["le rouge", "le vert", "toutes les couleurs", "le bleu"], "r": 0, "e": "Il absorbe les autres couleurs."},
+ {"q": "Un objet jaune éclairé en lumière bleue apparaît…", "o": ["noir", "jaune", "bleu", "vert"], "r": 0, "e": "Il absorbe le bleu."},
+ {"q": "Un objet vert éclairé en lumière blanche…", "o": ["diffuse le vert", "absorbe le vert", "émet du vert", "diffuse le rouge"], "r": 0, "e": "Il diffuse sa couleur."},
+ {"q": "Quand la lumière passe de l’air à l’eau, le rayon…", "o": ["se rapproche de la normale", "s’éloigne de la normale", "ne change pas", "s’arrête"], "r": 0, "e": "L’eau est plus réfringente."},
+ {"q": "Quelle est la loi de la réfraction de Snell-Descartes ?", "o": ["n<sub>1</sub> sin i<sub>1</sub> = n<sub>2</sub> sin i<sub>2</sub>", "n<sub>1</sub> + i<sub>1</sub> = n<sub>2</sub> + i<sub>2</sub>", "n<sub>1</sub> / sin i<sub>1</sub> = n<sub>2</sub> / sin i<sub>2</sub>", "i<sub>1</sub> = n<sub>2</sub>"], "r": 0, "e": "Relie les angles et les indices."},
+ {"q": "Quelle est l’expression de l’indice de réfraction n d’un milieu ?", "o": ["n = c / v", "n = v / c", "n = c × v", "n = c - v"], "r": 0, "e": "c : vitesse de la lumière dans le vide."},
+ {"q": "Quel est l’indice de réfraction approché de l’air ?", "o": ["1", "0", "1,5", "2"], "r": 0, "e": "Très proche de celui du vide."},
+ {"q": "Quel est l’indice de réfraction approché de l’eau ?", "o": ["1,33", "1", "2", "0,75"], "r": 0, "e": "n<sub>eau</sub> ≈ 1,33."},
+ {"q": "L’indice de réfraction d’un milieu est toujours…", "o": ["supérieur ou égal à 1", "inférieur à 1", "nul", "négatif"], "r": 0, "e": "La lumière est plus lente que dans le vide."},
+ {"q": "Comment une fibre optique guide-t-elle la lumière ?", "o": ["Par réflexion totale", "Par conduction électrique", "En émettant du son", "En mesurant une masse"], "r": 0, "e": "La lumière reste dans le cœur."},
+ {"q": "Qu’est-ce que la distance focale d’une lentille ?", "o": ["La distance entre le centre optique et le foyer", "Le diamètre de la lentille", "L’épaisseur de la lentille", "L’indice du verre"], "r": 0, "e": "Notée f’."},
+ {"q": "Qu’est-ce qu’une image réelle ?", "o": ["Une image qu’on peut recueillir sur un écran", "Une image qu’on ne voit pas", "Une image sonore", "Une image virtuelle"], "r": 0, "e": "Formée par convergence des rayons."},
+ {"q": "Quelle est l’unité de la longueur d’onde ?", "o": ["Le mètre", "Le hertz", "La seconde", "Le décibel"], "r": 0, "e": "La longueur d’onde est une longueur."}
+];
+const u4=a=>[...new Set(a)].slice(0,4);
+const GENERATEURS=[];
+/* ====== Fin de la zone à modifier ====== */
+
+const $=id=>document.getElementById(id);
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const mulberry=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+let rng=Math.random;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(rng()*a.length)];
+const fr=x=>String(x).replace(".",",");
+const L="ABCDEF";
+const plain=h=>h.replace(/<sup>(.*?)<\/sup>/g,"^$1").replace(/<sub>(.*?)<\/sub>/g,"$1").replace(/<[^>]+>/g,"");
+const ascii=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\x20-\x7e]/g,"?");
+let items=[],ans=[],cur=0,id={},seed=0,code="",active=false,reloaded=false,stopped=false,timeouts=0,tmr=null,fsOk=false,reseau=0;
+const away={count:0,secs:0,since:0};
+const okAt=i=>ans[i]!==null&&items[i].o[ans[i]].ok;
+const flags=()=>{const f=[];if(away.count)f.push("SORTIES:"+away.count+"/"+away.secs+"s");if(reseau)f.push("RESEAU:"+reseau);if(derog)f.push("DEROG");if(!fsOk)f.push("SANS-PLEIN-ECRAN");if(reloaded)f.push("REPRISE");if(stopped)f.push("ARRET-AUTO");if(timeouts)f.push("TEMPS-ECOULE:"+timeouts);return f.join(" ")||"RAS"};
+
+document.title="TEST n°"+NUMERO+" · "+CHAPITRE;
+$("title").textContent="TEST n°"+NUMERO+" · "+CHAPITRE;
+$("by").textContent="By "+AUTEUR+" pour "+ETABLISSEMENT+" · Version du "+VERSION;
+$("meta").textContent=NB_QUESTIONS+" questions personnelles · une seule bonne réponse · pas de retour en arrière"+(DUREE_QUESTION?" · "+DUREE_QUESTION+" s par question":"")+". Quitter la page, copier-coller et recharger sont détectés et signalés à l’enseignant. Après "+MAX_SORTIES+" sorties, le test s’arrête. Le test se déroule en plein écran, Wi-Fi, données mobiles et Bluetooth coupés.";
+$("mail").textContent=EMAIL;
+CLASSES.forEach(c=>{const o=document.createElement("option");o.value=o.textContent=c;$("classe").appendChild(o)});
+let derog=false;
+const netOk=()=>!RESEAU_COUPE_OBLIGATOIRE||!navigator.onLine||derog;
+let mdpOk=!MOT_DE_PASSE_ACTIF;
+const ready=()=>{$("go").disabled=!($("nom").value.trim()&&$("prenom").value.trim()&&$("classe").value&&netOk()&&mdpOk)};
+function netState(){
+  $("net").hidden=!RESEAU_COUPE_OBLIGATOIRE;
+  const on=navigator.onLine;
+  $("net").textContent=on?(derog?"Dérogation de l’enseignant acceptée.":"⚠ Réseau détecté : avant de commencer, passe en mode avion (Wi-Fi, données mobiles et Bluetooth coupés)."):"✓ Réseau coupé : tu peux commencer.";
+  $("net").style.color=on&&!derog?"var(--ko)":"var(--ok)";
+  ready();
+}
+window.addEventListener("online",netState);window.addEventListener("offline",netState);
+$("dg").onclick=()=>{if($("dcode").value.trim()===CODE_DEROGATION)derog=true;netState()};
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+async function verifMdp(){
+  const v=$("mdp").value.trim(),p="qcm|"+v;
+  try{mdpOk=!MOT_DE_PASSE_ACTIF||(window.crypto&&crypto.subtle?(await sha(p))===MDP_SHA256:hash(p)===MDP_FNV)}catch(e){mdpOk=hash(p)===MDP_FNV}
+  $("mdpmsg").textContent=MOT_DE_PASSE_ACTIF&&mdpOk&&v?"✓ Mot de passe accepté":"";
+  ready();
+}
+$("mdp").addEventListener("input",verifMdp);
+$("mdp").addEventListener("change",()=>{if(MOT_DE_PASSE_ACTIF&&!mdpOk&&$("mdp").value)$("mdpmsg").textContent="✗ Mot de passe incorrect"});
+if(!MOT_DE_PASSE_ACTIF)document.querySelector('label[for="mdp"]').hidden=$("mdp").hidden=true;
+["nom","prenom"].forEach(i=>$(i).addEventListener("input",ready));$("classe").addEventListener("change",ready);
+
+function show(s){["s-id","s-quiz","s-qr","s-pdf"].forEach(x=>$(x).classList.toggle("hide",x!==s));window.scrollTo(0,0)}
+
+$("go").onclick=()=>{
+  id={nom:$("nom").value.trim().toUpperCase(),prenom:$("prenom").value.trim(),classe:$("classe").value};
+  seed=hash(NUMERO+"|"+ascii(id.nom).toLowerCase()+"|"+ascii(id.prenom).toLowerCase()+"|"+id.classe);rng=mulberry(seed);
+  code=seed.toString(36).toUpperCase().padStart(6,"0").slice(0,6);
+  const pool=[...QUESTIONS.map((x,i)=>({...x,n:"S"+(i+1)})),...GENERATEURS.map((g,i)=>({...g(),n:"G"+(i+1)}))];
+  items=shuffle(pool).slice(0,NB_QUESTIONS).map(x=>{const o=x.o.map((t,i)=>({t,ok:i===x.r}));return {n:x.n,q:x.q,e:x.e,o:MELANGER_REPONSES?shuffle(o):o}});
+  ans=items.map(()=>null);cur=0;away.count=away.secs=away.since=0;timeouts=0;stopped=false;reloaded=false;
+  try{const k="t"+NUMERO+"_"+code;if(localStorage.getItem(k))reloaded=true;localStorage.setItem(k,"1")}catch(e){}
+  reseau=0;fsOk=false;unlockAudio();enterFs();active=true;show("s-quiz");render();startTimer();
+};
+function render(){
+  const it=items[cur],n=items.length;
+  $("count").textContent="Question "+(cur+1)+" / "+n;
+  $("fill").style.width=((cur+1)/n*100)+"%";
+  $("q").innerHTML=it.q;
+  const box=$("opts");box.innerHTML="";
+  it.o.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"+(ans[cur]===i?" sel":"");
+    b.setAttribute("aria-pressed",ans[cur]===i);
+    b.innerHTML="<b>"+L[i]+"</b><span>"+o.t+"</span>";
+    b.onclick=()=>{ans[cur]=i;render()};
+    box.appendChild(b);
+  });
+  $("next").textContent=cur===n-1?"Terminer le test":"Question suivante";
+  $("next").disabled=ans[cur]===null;
+}
+function advance(){try{speechSynthesis.cancel()}catch(e){}if(cur<items.length-1){cur++;render();startTimer();window.scrollTo(0,0)}else finish()}
+$("next").onclick=advance;
+function startTimer(){
+  clearInterval(tmr);$("tmw").classList.toggle("hide",!DUREE_QUESTION);
+  if(!DUREE_QUESTION)return;
+  let t=DUREE_QUESTION;$("tm").style.width="100%";
+  tmr=setInterval(()=>{t--;$("tm").style.width=(t/DUREE_QUESTION*100)+"%";if(t<=0){clearInterval(tmr);if(ans[cur]===null)timeouts++;advance()}},1000);
+}
+
+let pts=0;
+function finish(){
+  clearInterval(tmr);active=false;$("warn").classList.add("hide");$("calc").classList.add("hide");try{speechSynthesis.cancel()}catch(e){}
+  try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}
+  if(away.since){away.secs+=Math.round((Date.now()-away.since)/1000);away.since=0}
+  pts=items.reduce((s,it,i)=>s+(okAt(i)?1:0),0);
+  const n=items.length,note=String(Math.round(pts/n*40)/2).replace(".",",");
+  const detail=items.map((it,i)=>it.n+":"+(okAt(i)?1:0)).join(" ");
+  const payload=ascii("TEST "+NUMERO+" V"+code+"\n"+id.nom+" "+id.prenom+" "+id.classe+"\nScore "+pts+"/"+n+" ("+note+"/20)\n"+detail+"\n"+flags());
+  $("qr").innerHTML="";
+  try{new QRCode($("qr"),{text:payload,width:220,height:220,correctLevel:QRCode.CorrectLevel.L})}
+  catch(e){$("qr").textContent="QR-code indisponible : montre cet écran à ton enseignant."}
+  $("qrwho").textContent=id.nom+" "+id.prenom+" · "+id.classe+" · Version "+code+(stopped?" · Test arrêté automatiquement":"");
+  show("s-qr");
+}
+const pd=s=>String(s).replace(/[’‘]/g,"'").replace(/→/g,"->").replace(/≈/g,"~").replace(/[−–—]/g,"-").replace(/…/g,"...").replace(/Δ/g,"delta ").replace(/ρ/g,"rho").replace(/Ω/g,"ohm").replace(/π/g,"pi").replace(/[^ -~\u00a0-\u00ff\n]/g,"");
+function copieTexte(){
+  const n=items.length,note=String(Math.round(pts/n*40)/2).replace(".",",");
+  return "TEST n°"+NUMERO+" - "+id.nom+" "+id.prenom+" - "+id.classe+"\nScore : "+pts+"/"+n+" ("+note+"/20)\nVersion : "+code+" | Contrôle : "+flags()+"\n\n"+
+    items.map((it,i)=>(i+1)+". "+plain(it.q).slice(0,90)+"\n   Réponse : "+(ans[i]===null?"(aucune)":plain(it.o[ans[i]].t))+" ["+(okAt(i)?"JUSTE":"FAUX")+"]").join("\n");
+}
+$("suivant").onclick=()=>{
+  $("ml").href="mailto:"+EMAIL+"?subject="+encodeURIComponent("TEST "+NUMERO+" - "+id.nom+" "+id.prenom+" - "+id.classe)+"&body="+encodeURIComponent(copieTexte());
+  show("s-pdf");
+};
+$("cpy").onclick=async()=>{try{await navigator.clipboard.writeText(copieTexte());$("msg").textContent="Texte copié : colle-le dans un mail à "+EMAIL+"."}catch(e){$("msg").textContent="Copie impossible : fais des captures d’écran de ta copie."}};
+
+$("pdf").onclick=async()=>{
+  const m=$("msg");m.textContent="";
+  try{
+    const {jsPDF}=window.jspdf,d=new jsPDF({unit:"mm",format:"a4"});
+    const W=180;let y=20;
+    const line=(t,sz,b)=>{d.setFont("helvetica",b?"bold":"normal");d.setFontSize(sz);
+      d.splitTextToSize(pd(t),W).forEach(l=>{if(y>280){d.addPage();y=20}d.text(l,15,y);y+=sz*0.5})};
+    const n=items.length,note=String(Math.round(pts/n*40)/2).replace(".",",");
+    line("TEST n°"+NUMERO+" - "+CHAPITRE,16,1);y+=3;
+    line("NOM : "+id.nom+"   PRÉNOM : "+id.prenom+"   CLASSE : "+id.classe,11);
+    line("Score : "+pts+" / "+n+"  (soit "+note+" / 20)",11,1);
+    line("Version du test : "+code+"  |  Contrôle : "+flags(),9);y+=5;
+    items.forEach((it,i)=>{
+      const ok=okAt(i),bonne=it.o.find(o=>o.ok);
+      line((i+1)+". "+plain(it.q),11,1);
+      line("Réponse de l’élève : "+(ans[i]===null?"(aucune réponse)":plain(it.o[ans[i]].t))+(ok?"  [JUSTE]":"  [FAUX]"),10);
+      if(!ok)line("Bonne réponse : "+plain(bonne.t),10);
+      line("Explication : "+plain(it.e),9);y+=4;
+    });
+    const buf=d.output("arraybuffer");
+    const fn=ascii("TEST_"+NUMERO+"_"+id.nom+"_"+id.prenom+".pdf").replace(/\s+/g,"_");
+    const dl=(window.claude&&claude.use)?await claude.use("downloads"):null;
+    if(dl)await dl.save({filename:fn,data:buf});else d.save(fn);
+    m.textContent="PDF enregistré. Envoie-le maintenant par mail.";
+  }catch(e){m.textContent=(e&&e.code==="declined")?"Enregistrement annulé. Clique à nouveau pour réessayer.":"Impossible de générer le PDF ("+((e&&(e.code||e.message))||"erreur")+"). Utilise la solution de secours ci-dessous."}
+};
+
+/* ===== Anti-triche : détection, pas blocage total ===== */
+function leave(){if(!active||away.since)return;away.since=Date.now();away.count++;alarm()}
+function back(){
+  if(!away.since)return;
+  away.secs+=Math.round((Date.now()-away.since)/1000);away.since=0;
+  if(!active)return;
+  if(away.count>=MAX_SORTIES){stopped=true;active=false;clearInterval(tmr);showAlert("⛔ TEST ARRÊTÉ","Tu as quitté la page "+away.count+" fois. Le test est arrêté et ton enseignant sera prévenu.","Voir mon QR-code");return}
+  showAlert("⚠ ALERTE : sortie de la page ("+away.count+"/"+MAX_SORTIES+")","Cette sortie est enregistrée et visible par ton enseignant. À la sortie n°"+MAX_SORTIES+", le test s’arrête.","Reprendre le test");
+}
+let ac=null;
+function unlockAudio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){}}
+function alarm(){
+  try{if(ac){ac.resume();for(let i=0;i<6;i++){const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*0.35;o.type="square";o.frequency.value=i%2?660:880;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.25,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.3);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+0.32)}}}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate([300,100,300,100,300])}catch(e){}
+}
+function showAlert(t,m,b){$("warnt").textContent=t;$("warnm").textContent=m;$("warnb").textContent=b;$("warn").classList.remove("hide");alarm()}
+$("warnb").onclick=()=>{$("warn").classList.add("hide");if(stopped)finish();else enterFs()};
+document.addEventListener("visibilitychange",()=>document.hidden?leave():back());
+window.addEventListener("blur",leave);window.addEventListener("focus",back);
+["copy","cut","paste","contextmenu","dragstart","selectstart"].forEach(ev=>document.addEventListener(ev,e=>{if(active)e.preventDefault()}));
+document.addEventListener("keydown",e=>{if(!active)return;const k=e.key.toLowerCase(),c=e.ctrlKey||e.metaKey;if((c&&"cxvaspuf".includes(k))||e.key==="F12"||(c&&e.shiftKey&&"ijc".includes(k)))e.preventDefault()});
+window.addEventListener("beforeunload",e=>{if(active){e.preventDefault();e.returnValue=""}});
+
+/* ===== Vocal et calculatrice ===== */
+const oral=h=>String(h).replace(/<sup>(.*?)<\/sup>/g,(m,a)=>" exposant "+a.replace(/^-/,"moins ").replace(/^\+$/,"plus")+" ").replace(/<sub>(.*?)<\/sub>/g,(m,a)=>" "+a+" ").replace(/<[^>]+>/g,"").replace(/×/g," fois ").replace(/≈/g," environ ").replace(/=/g," égale ").replace(/\//g," par ").replace(/\s+/g," ").trim();
+function parle(txt){try{const s=window.speechSynthesis;s.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang="fr-FR";u.rate=0.95;const v=s.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith("fr"));if(v)u.voice=v;s.speak(u)}catch(e){}}
+if(!VOCAL)$("speak").hidden=true;
+$("speak").onclick=()=>{const s=window.speechSynthesis;if(!s||typeof SpeechSynthesisUtterance==="undefined"){$("speak").textContent="🔇 Vocal indisponible sur cet appareil";return}if(s.speaking){s.cancel();return}const it=items[cur];parle(oral(it.q)+". "+it.o.map((o,i)=>"Réponse "+L[i]+" : "+oral(o.t)).join(". ")+".")};
+
+if(!CALCULATRICE)$("calcb").hidden=true;
+const calc={e:"",done:false,ans:0};
+const fmtN=r=>{if(!isFinite(r))throw 0;if(r===0)return"0";const a=Math.abs(r);if(a>=1e10||a<1e-4){const [m,x]=r.toExponential(8).split("e");return String(Number(m)).replace(".",",")+"×10^"+Number(x)}return String(Number(r.toPrecision(10))).replace(".",",")};
+function calcEval(src){
+  const clean=src.replace(/\s/g,"").replace(/,/g,"."),t=clean.match(/\d+\.?\d*|\.\d+|[+\-×÷^()√π]|ans/g)||[];
+  if(t.join("")!==clean)throw 0;
+  let i=0;const peek=()=>t[i],nx=()=>t[i++];
+  const expr=()=>{let v=term();while(peek()==="+"||peek()==="-"){const o=nx(),r=term();v=o==="+"?v+r:v-r}return v};
+  const term=()=>{let v=unary();for(;;){const p=peek();if(p==="×"||p==="÷"){nx();const r=unary();v=p==="×"?v*r:v/r}else if(p&&(p==="("||p==="√"||p==="π"||p==="ans"||/^\d|^\./.test(p))){v*=unary()}else break}return v};
+  const unary=()=>{if(peek()==="-"){nx();return -unary()}if(peek()==="+"){nx();return unary()}return pow()};
+  const pow=()=>{const b=atom();if(peek()==="^"){nx();return Math.pow(b,unary())}return b};
+  const atom=()=>{const p=nx();if(p===undefined)throw 0;if(p==="("){const v=expr();if(peek()===")")nx();return v}if(p==="√"){const v=atom();if(v<0)throw 0;return Math.sqrt(v)}if(p==="π")return Math.PI;if(p==="ans")return calc.ans;const n=parseFloat(p);if(isNaN(n))throw 0;return n};
+  const v=expr();if(i<t.length)throw 0;return v;
+}
+function calcKey(k){
+  if(k==="C"){calc.e="";calc.done=false;$("ch").textContent=""}
+  else if(k==="⌫"){if(calc.done){calc.e="";calc.done=false}else calc.e=calc.e.slice(0,-1)}
+  else if(k==="="){try{const r=calcEval(calc.e);$("ch").textContent=calc.e+" =";calc.ans=r;calc.e=fmtN(r)}catch(x){$("ch").textContent="";calc.e="Erreur"}calc.done=true}
+  else{
+    if(calc.done){if(calc.e==="Erreur"||!["+","-","×","÷","^","×10^","^2"].includes(k))calc.e="";calc.done=false}
+    calc.e+=k;
+  }
+  $("cd").textContent=calc.e||"0";
+}
+[["C","C","op"],["⌫","⌫","op"],["(","("],[")",")"],["7","7"],["8","8"],["9","9"],["÷","÷","op"],["4","4"],["5","5"],["6","6"],["×","×","op"],["1","1"],["2","2"],["3","3"],["−","-","op"],["0","0"],[",",","],["=","=","eq"],["+","+","op"],["^","^","op"],["√","√","op"],["π","π"],["×10ˣ","×10^","op"],["Ans","ans"],["x²","^2","op"],["10ˣ","10^","op"]]
+  .forEach(([l,v,c])=>{const b=document.createElement("button");b.type="button";b.textContent=l;if(c)b.className=c;b.onclick=()=>calcKey(v);$("ck").appendChild(b)});
+$("calcb").onclick=()=>$("calc").classList.toggle("hide");
+$("cx").onclick=()=>$("calc").classList.add("hide");
+
+/* ===== Plein écran et réseau ===== */
+function enterFs(){try{const el=document.documentElement,f=el.requestFullscreen||el.webkitRequestFullscreen;if(!f)return;const p=f.call(el);if(p&&p.then)p.then(()=>{fsOk=true}).catch(()=>{});else fsOk=true}catch(e){}}
+function incident(what){
+  if(!active)return;
+  away.count++;
+  if(away.count>=MAX_SORTIES){stopped=true;active=false;clearInterval(tmr);showAlert("⛔ TEST ARRÊTÉ",what+" Le test est arrêté et ton enseignant sera prévenu.","Voir mon QR-code");return}
+  showAlert("⚠ ALERTE ("+away.count+"/"+MAX_SORTIES+")",what+" Incident enregistré et visible par ton enseignant. À l’incident n°"+MAX_SORTIES+", le test s’arrête.","Reprendre le test");
+}
+const fsOff=()=>{if(active&&fsOk&&!document.fullscreenElement&&!document.webkitFullscreenElement)incident("Tu as quitté le plein écran.")};
+document.addEventListener("fullscreenchange",fsOff);document.addEventListener("webkitfullscreenchange",fsOff);
+window.addEventListener("online",()=>{if(active&&RESEAU_COUPE_OBLIGATOIRE){reseau++;incident("Une connexion réseau (Wi-Fi, données mobiles ou Bluetooth) a été détectée.")}});
+netState();
+</script>
+</body>
+</html>

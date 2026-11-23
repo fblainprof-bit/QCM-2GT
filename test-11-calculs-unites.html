@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TEST n°011 · Conversions, notation scientifique et chiffres significatifs</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#16231e;--mute:#5b6b64;--line:#d5dfda;--acc:#0f766e;--acc-ink:#fff;--ok:#157347;--okbg:#e3f4ea;--ko:#b3261e;--kobg:#fbe7e5;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1916;--card:#172420;--ink:#e8f1ed;--mute:#97aaa2;--line:#2b3f38;--acc:#2dd4bf;--acc-ink:#04201c;--ok:#5fd68f;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1b19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1916;--card:#172420;--ink:#e8f1ed;--mute:#97aaa2;--line:#2b3f38;--acc:#2dd4bf;--acc-ink:#04201c;--ok:#5fd68f;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1b19;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;font-size:18px;line-height:1.5}
+main{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.7rem;line-height:1.15;margin:0 0 4px}
+p{margin:0 0 14px}
+.mute{color:var(--mute);font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+label{display:block;font-weight:700;margin:14px 0 6px}
+input[type=text],input[type=password],select{width:100%;font:inherit;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+input:focus,select:focus,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:13px 22px;font-weight:700;min-height:48px;width:100%;margin-top:18px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sec{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.tools{display:flex;gap:10px;margin:-4px 0 14px}.tools .btn{margin:0;width:auto;flex:1;padding:9px 12px;min-height:42px;font-size:.95rem}
+#calc{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:680px;background:var(--card);border-top:3px solid var(--acc);border-radius:16px 16px 0 0;padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:40;-webkit-user-select:none;user-select:none}#calc.hide{display:none}#calc .btn{margin-top:0}.cd{font-size:1.8rem;font-weight:700;text-align:right;min-height:2.4rem;overflow-x:auto;white-space:nowrap}.ch{text-align:right;color:var(--mute);font-size:.9rem;min-height:1.2rem;overflow-x:auto;white-space:nowrap}.ck{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.ck button{padding:10px 0;font-size:1.15rem;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}.ck button.op{border-color:var(--acc)}.ck button.eq{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 18px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .25s}
+.q{font-size:1.2rem;font-weight:700;line-height:1.35;margin-bottom:16px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;min-height:52px}
+.opt b{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--mute);display:grid;place-items:center;font-size:.85rem}
+.opt.sel{border-color:var(--acc);background:var(--card);box-shadow:inset 0 0 0 1px var(--acc)}
+.opt.sel b{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+#qr{display:flex;justify-content:center;margin:18px 0}
+#qr>div{background:#fff;padding:14px;border-radius:10px;line-height:0}
+.alert{font-weight:700;font-size:1.15rem}
+.note{border-left:6px solid var(--acc);padding:10px 14px;background:var(--bg);border-radius:0 10px 10px 0;margin-top:14px;font-size:.95rem}
+#s-quiz{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.tm{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:14px}.tm i{display:block;height:100%;background:var(--ko);transition:width 1s linear}#warn{position:fixed;inset:0;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px;z-index:50}#warn.hide{display:none}#warn .card{max-width:420px;border:4px solid var(--ko);text-align:center}#warn .alert{color:var(--ko);font-size:1.4rem}@keyframes pulse{50%{background:rgba(179,38,30,.92)}}#warn{animation:pulse .8s infinite}@media (prefers-reduced-motion:reduce){#warn{animation:none}}@media print{body{display:none}}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<section id="s-id" class="card">
+  <p class="mute" id="by"></p>
+  <h1 id="title"></h1>
+  <p class="mute" id="meta"></p>
+  <label for="nom">NOM</label>
+  <input type="text" id="nom" autocomplete="family-name">
+  <label for="prenom">PRÉNOM</label>
+  <input type="text" id="prenom" autocomplete="given-name">
+  <label for="classe">CLASSE</label>
+  <select id="classe"><option value="">— Choisir —</option></select>
+  <label for="mdp">MOT DE PASSE DU TEST</label>
+  <input type="password" id="mdp" autocomplete="off" placeholder="Donné par ton enseignant">
+  <p class="mute" id="mdpmsg" style="margin:6px 0 0"></p>
+  <p class="note" id="net" style="font-weight:700"></p>
+  <details class="mute" style="margin-top:10px"><summary>Mon appareil indique toujours « connecté »</summary><label for="dcode">Code de l’enseignant</label><input type="text" id="dcode" autocomplete="off"><button class="btn" id="dg" type="button">Valider</button></details>
+  <button class="btn" id="go" disabled>Commencer</button>
+</section>
+
+<section id="s-quiz" class="hide">
+  <div class="mute" id="count"></div>
+  <div class="bar"><i id="fill"></i></div>
+  <div class="tm hide" id="tmw"><i id="tm"></i></div>
+  <div class="card">
+    <div class="q" id="q"></div>
+    <div class="tools"><button class="btn sec" id="speak" type="button">🔊 Écouter</button><button class="btn sec" id="calcb" type="button">🧮 Calculatrice</button></div>
+    <div id="opts"></div>
+    <button class="btn" id="next">Question suivante</button>
+  </div>
+</section>
+
+<section id="s-qr" class="hide">
+  <div class="card">
+    <p class="alert">Montre ce QR-CODE à ton enseignant avant de continuer !</p>
+    <div id="qr"></div>
+    <p class="mute" id="qrwho"></p>
+    <button class="btn" id="suivant">Suivant</button>
+  </div>
+</section>
+
+<section id="s-pdf" class="hide">
+  <div class="card">
+    <h1 style="font-size:1.3rem">Ta copie</h1>
+    <button class="btn" id="pdf" style="margin-top:6px">GÉNÉRER TA COPIE EN PDF</button>
+    <p class="note">Tu peux maintenant réactiver ton Wi-Fi. Envoie ce PDF par mail à <b id="mail"></b> en pièce jointe.<br><b>Attention ! Indique ton NOM, ton PRÉNOM et ta CLASSE dans le mail, et envoie le fichier depuis ta propre adresse mail.</b></p>
+    <p class="mute" id="msg" style="margin-top:12px"></p>
+    <details open style="margin-top:14px"><summary><b>Le PDF ne fonctionne pas ?</b></summary>
+      <p class="mute" style="margin-top:10px">Solution de secours : copie le texte de ta copie et colle-le dans un mail à l’enseignant, ou ouvre ton application mail avec le texte déjà préparé. Montre aussi ton QR-code.</p>
+      <button class="btn" id="cpy" style="margin-top:6px">Copier le texte de ma copie</button>
+      <a class="btn" id="ml" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:10px">Ouvrir mon application mail</a>
+    </details>
+  </div>
+</section>
+</main>
+<div id="calc" class="hide" role="dialog" aria-label="Calculatrice"><div class="ch" id="ch"></div><div class="cd" id="cd">0</div><div class="ck" id="ck"></div><button class="btn sec" id="cx" type="button">Fermer la calculatrice</button></div>
+<div id="warn" class="hide"><div class="card"><p class="alert" id="warnt"></p><p id="warnm"></p><button class="btn" id="warnb">Reprendre le test</button></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ====== À MODIFIER ====== */
+const NUMERO = "011";
+const CHAPITRE = "Conversions, notation scientifique et chiffres significatifs";
+const AUTEUR = "Physique-Chimie";
+const ETABLISSEMENT = "La Joliverie";
+const VERSION = "16/11/2026";
+const EMAIL = "fblainprof@gmail.com";
+const CLASSES = ["2NDE-1","2NDE-2","2NDE-3","2NDE-4","2NDE-5","2NDE-6","1TSBAT","2TSBAT","1TSMV","2TSMV"];
+const NB_QUESTIONS = 10;   /* nombre de questions tirées au sort dans la banque pour chaque élève */
+const MAX_SORTIES = 3;     /* le test s’arrête à cette sortie (les précédentes déclenchent une alerte) */
+const DUREE_QUESTION = 90; /* secondes par question (0 = pas de limite) */
+const RESEAU_COUPE_OBLIGATOIRE = true; /* true : l’élève doit être hors réseau (mode avion) pour commencer ; une reconnexion pendant le test est sanctionnée */
+const CODE_DEROGATION = "PROF-2026"; /* code à saisir par vous si un appareil se dit « connecté » alors que le mode avion est activé */
+const MOT_DE_PASSE_ACTIF = true; /* true : mot de passe obligatoire pour commencer ; seules ses empreintes sont dans la page */
+const MDP_SHA256 = "8835f2cfaecb3d2f14cf1e9c7acbf7e3cd000d18529a66bf0c767df9c13e8066";
+const MDP_FNV = 766917492;
+const VOCAL = true;         /* bouton 🔊 qui lit la question et les réponses à voix haute */
+const CALCULATRICE = true;  /* calculatrice intégrée, disponible pendant le test */
+const MELANGER_REPONSES = true;
+/* q = énoncé (HTML accepté), o = propositions, r = indice de la bonne réponse (à partir de 0), e = explication */
+const QUESTIONS = [
+ {"q": "Quelle est l’écriture scientifique d’un nombre ?", "o": ["a × 10<sup>n</sup> avec a compris entre 1 (inclus) et 10 (exclu) et n entier", "a × 10<sup>n</sup> avec a compris entre 0 et 1", "a × 10<sup>n</sup> avec a quelconque", "a + 10<sup>n</sup> avec n entier"], "r": 0, "e": "Un seul chiffre non nul avant la virgule."},
+ {"q": "Quelle est l’écriture scientifique de 4 500 000 ?", "o": ["4,5 × 10<sup>6</sup>", "45 × 10<sup>5</sup>", "0,45 × 10<sup>7</sup>", "4,5 × 10<sup>5</sup>"], "r": 0, "e": "La virgule est décalée de 6 rangs vers la gauche."},
+ {"q": "Quelle est l’écriture scientifique de 0,00032 ?", "o": ["3,2 × 10<sup>-4</sup>", "3,2 × 10<sup>-3</sup>", "32 × 10<sup>-5</sup>", "3,2 × 10<sup>4</sup>"], "r": 0, "e": "La virgule est décalée de 4 rangs vers la droite : exposant négatif."},
+ {"q": "Quelle est l’écriture scientifique de 0,0000005 ?", "o": ["5 × 10<sup>-7</sup>", "5 × 10<sup>-6</sup>", "0,5 × 10<sup>-6</sup>", "5 × 10<sup>7</sup>"], "r": 0, "e": "La virgule est décalée de 7 rangs."},
+ {"q": "L’écriture 0,5 × 10<sup>-3</sup> est-elle une écriture scientifique ?", "o": ["Non, car 0,5 est inférieur à 1", "Oui", "Oui, car l’exposant est négatif", "Non, car l’exposant est négatif"], "r": 0, "e": "On écrit 5 × 10<sup>-4</sup>."},
+ {"q": "Quel est l’ordre de grandeur de 8,7 × 10<sup>3</sup> ?", "o": ["10<sup>4</sup>", "10<sup>3</sup>", "10<sup>2</sup>", "10<sup>5</sup>"], "r": 0, "e": "8,7 est plus proche de 10 que de 1."},
+ {"q": "Quelle est la valeur de 1 nm ?", "o": ["10<sup>-9</sup> m", "10<sup>-6</sup> m", "10<sup>-3</sup> m", "10<sup>9</sup> m"], "r": 0, "e": "Le préfixe nano vaut 10<sup>-9</sup>."},
+ {"q": "Quelle est la valeur de 1 µm ?", "o": ["10<sup>-6</sup> m", "10<sup>-9</sup> m", "10<sup>-3</sup> m", "10<sup>-12</sup> m"], "r": 0, "e": "Le préfixe micro vaut 10<sup>-6</sup>."},
+ {"q": "Que signifie le préfixe « kilo » ?", "o": ["10<sup>3</sup>", "10<sup>2</sup>", "10<sup>-3</sup>", "10<sup>6</sup>"], "r": 0, "e": "1 km = 1 000 m."},
+ {"q": "Que signifie le préfixe « méga » ?", "o": ["10<sup>6</sup>", "10<sup>3</sup>", "10<sup>9</sup>", "10<sup>-6</sup>"], "r": 0, "e": "1 MHz = 10<sup>6</sup> Hz."},
+ {"q": "1 L est égal à…", "o": ["1 dm<sup>3</sup>", "1 cm<sup>3</sup>", "1 m<sup>3</sup>", "10 dm<sup>3</sup>"], "r": 0, "e": "1 L = 1 dm<sup>3</sup>."},
+ {"q": "1 mL est égal à…", "o": ["1 cm<sup>3</sup>", "1 dm<sup>3</sup>", "1 m<sup>3</sup>", "10 cm<sup>3</sup>"], "r": 0, "e": "1 mL = 1 cm<sup>3</sup>."},
+ {"q": "1 m<sup>3</sup> est égal à…", "o": ["1 000 L", "100 L", "10 L", "1 L"], "r": 0, "e": "1 m<sup>3</sup> = 1 000 dm<sup>3</sup>."},
+ {"q": "Combien de chiffres significatifs possède 0,0450 ?", "o": ["3", "2", "4", "5"], "r": 0, "e": "Les zéros à gauche ne comptent pas ; le zéro final compte."},
+ {"q": "Combien de chiffres significatifs possède 3,00 × 10<sup>8</sup> ?", "o": ["3", "1", "2", "8"], "r": 0, "e": "Les deux zéros de 3,00 sont significatifs."},
+ {"q": "Combien de décimales possède 12,340 ?", "o": ["3", "2", "4", "5"], "r": 0, "e": "Les décimales sont les chiffres après la virgule."},
+ {"q": "Pour un produit ou un quotient, le résultat est donné avec…", "o": ["autant de chiffres significatifs que la donnée la moins précise", "autant de décimales que la donnée la plus précise", "tous les chiffres de la calculatrice", "un seul chiffre significatif"], "r": 0, "e": "On garde le plus petit nombre de chiffres significatifs."},
+ {"q": "Pour une somme ou une différence, le résultat est donné avec…", "o": ["autant de décimales que la donnée qui en a le moins", "autant de chiffres significatifs que la donnée qui en a le plus", "toutes les décimales de la calculatrice", "aucune décimale"], "r": 0, "e": "On s’aligne sur la donnée la moins précise en décimales."},
+ {"q": "Quelle valeur est la plus précise ?", "o": ["25,0 mL", "25 mL", "2,5 × 10<sup>1</sup> mL", "30 mL"], "r": 0, "e": "25,0 a 3 chiffres significatifs, contre 2 pour les autres."},
+ {"q": "Quand faut-il arrondir dans un calcul à plusieurs étapes ?", "o": ["À la fin, sur le résultat final", "À chaque étape", "Jamais", "Seulement au début"], "r": 0, "e": "On garde les valeurs complètes pour éviter l’accumulation d’erreurs."},
+ {"q": "Pourquoi faut-il toujours donner l’unité d’un résultat ?", "o": ["Une grandeur physique est un nombre accompagné de son unité", "C’est facultatif", "Elle ne change pas la valeur", "Pour faire joli"], "r": 0, "e": "Sans unité, le résultat n’a pas de sens."},
+ {"q": "Quelle est la valeur de 1 µs ?", "o": ["10<sup>-6</sup> s", "10<sup>-3</sup> s", "10<sup>-9</sup> s", "10<sup>6</sup> s"], "r": 0, "e": "Micro = 10<sup>-6</sup>."},
+ {"q": "Quelle est la valeur de 1 GHz ?", "o": ["10<sup>9</sup> Hz", "10<sup>6</sup> Hz", "10<sup>3</sup> Hz", "10<sup>12</sup> Hz"], "r": 0, "e": "Giga = 10<sup>9</sup>."},
+ {"q": "Quelle est la valeur de 1 pm ?", "o": ["10<sup>-12</sup> m", "10<sup>-9</sup> m", "10<sup>-6</sup> m", "10<sup>12</sup> m"], "r": 0, "e": "Pico = 10<sup>-12</sup>."},
+ {"q": "Que vaut 3 × 10<sup>8</sup> m/s en km/s ?", "o": ["3 × 10<sup>5</sup> km/s", "3 × 10<sup>11</sup> km/s", "3 × 10<sup>8</sup> km/s", "3 × 10<sup>2</sup> km/s"], "r": 0, "e": "1 km = 10<sup>3</sup> m."},
+ {"q": "Que vaut 1,5 × 10<sup>11</sup> m en km ?", "o": ["1,5 × 10<sup>8</sup> km", "1,5 × 10<sup>14</sup> km", "1,5 × 10<sup>11</sup> km", "1,5 × 10<sup>5</sup> km"], "r": 0, "e": "On divise par 10<sup>3</sup>."},
+ {"q": "Calculer (2 × 10<sup>3</sup>) × (3 × 10<sup>2</sup>).", "o": ["6 × 10<sup>5</sup>", "5 × 10<sup>5</sup>", "6 × 10<sup>6</sup>", "5 × 10<sup>6</sup>"], "r": 0, "e": "On multiplie les nombres et on additionne les exposants."},
+ {"q": "Calculer (6 × 10<sup>5</sup>) / (2 × 10<sup>2</sup>).", "o": ["3 × 10<sup>3</sup>", "3 × 10<sup>7</sup>", "4 × 10<sup>3</sup>", "3 × 10<sup>2</sup>"], "r": 0, "e": "On soustrait les exposants."},
+ {"q": "Calculer 10<sup>3</sup> × 10<sup>-5</sup>.", "o": ["10<sup>-2</sup>", "10<sup>-8</sup>", "10<sup>2</sup>", "10<sup>-15</sup>"], "r": 0, "e": "3 + (-5) = -2."},
+ {"q": "Calculer (10<sup>2</sup>)<sup>3</sup>.", "o": ["10<sup>6</sup>", "10<sup>5</sup>", "10<sup>8</sup>", "10<sup>9</sup>"], "r": 0, "e": "On multiplie les exposants."},
+ {"q": "Que vaut 10<sup>0</sup> ?", "o": ["1", "0", "10", "Rien"], "r": 0, "e": "Tout nombre non nul à la puissance 0 vaut 1."},
+ {"q": "Que vaut 10<sup>-2</sup> ?", "o": ["0,01", "0,1", "0,001", "-100"], "r": 0, "e": "10<sup>-2</sup> = 1 / 100."},
+ {"q": "Comment écrire 12,5 × 10<sup>3</sup> en écriture scientifique ?", "o": ["1,25 × 10<sup>4</sup>", "12,5 × 10<sup>3</sup>", "1,25 × 10<sup>3</sup>", "125 × 10<sup>2</sup>"], "r": 0, "e": "1 chiffre non nul avant la virgule."},
+ {"q": "Combien de chiffres significatifs possède 5,0 × 10<sup>2</sup> ?", "o": ["2", "1", "3", "0"], "r": 0, "e": "5 et 0."},
+ {"q": "Combien de décimales possède 0,0072 ?", "o": ["4", "2", "1", "3"], "r": 0, "e": "Chiffres après la virgule."},
+ {"q": "Une règle graduée en mm donne une longueur de 12,3 cm. Combien de décimales en cm ?", "o": ["1", "3", "0", "2"], "r": 0, "e": "Précision d’un millimètre."},
+ {"q": "Arrondir 0,0250 à 2 chiffres significatifs.", "o": ["0,025", "0,03", "0,0", "0,02"], "r": 0, "e": "Les zéros à gauche ne comptent pas."},
+ {"q": "Arrondir 7,96 à 1 chiffre significatif.", "o": ["8", "7", "7,9", "80"], "r": 0, "e": "Le chiffre suivant est 9."},
+ {"q": "Que donne 4,2 × 3,10 avec le bon nombre de chiffres significatifs ?", "o": ["13", "13,02", "13,0", "13,1"], "r": 0, "e": "Le moins précis a 2 c.s."},
+ {"q": "Que traduit l’incertitude d’une mesure ?", "o": ["La précision de la mesure", "Une erreur de calcul", "Une valeur toujours nulle", "La valeur exacte"], "r": 0, "e": "Elle accompagne le résultat."},
+ {"q": "Que signifie l’écriture 5,00 g ?", "o": ["Une précision au centième de gramme", "Une précision au gramme", "Une précision au dixième de gramme", "Une précision au kilogramme"], "r": 0, "e": "Trois chiffres significatifs."},
+ {"q": "Pourquoi garder les valeurs non arrondies dans les calculs intermédiaires ?", "o": ["Pour limiter l’accumulation d’erreurs", "Pour ralentir le calcul", "C’est interdit", "Pour faire joli"], "r": 0, "e": "On arrondit seulement à la fin."},
+ {"q": "Que vaut 2,5 h en minutes ?", "o": ["150 min", "250 min", "25 min", "1,5 min"], "r": 0, "e": "2,5 × 60."}
+];
+const u4=a=>[...new Set(a)].slice(0,4);
+const GENERATEURS=[
+ ()=>{const c=pick([["km","m",3],["m","cm",2],["mm","m",-3],["m","mm",3],["cm","m",-2],["L","mL",3],["mL","L",-3],["g","kg",-3],["kg","g",3]]),v=pick([2.5,0.35,12,4.8,0.072,7]),a=v*Math.pow(10,c[2]),f=x=>String(Number(x.toPrecision(10))).replace(".",",");
+  return {q:"Convertir "+f(v)+" "+c[0]+" en "+c[1]+".",o:u4([f(a)+" "+c[1],f(a*10)+" "+c[1],f(a/10)+" "+c[1],f(a*100)+" "+c[1]]),r:0,e:"1 "+c[0]+" = 10<sup>"+c[2]+"</sup> "+c[1]+", donc "+f(v)+" "+c[0]+" = "+f(a)+" "+c[1]+"."}},
+ ()=>{const m=pick([1.2,3.5,4.7,6.02,8.1,2.4]),x=pick([-8,-5,-3,3,5,8]),d=String(m).replace(".",""),fr=s=>String(s).replace(".",",");
+  const plain=x>0?d+"0".repeat(x-(d.length-1)):"0,"+"0".repeat(-x-1)+d,s=(a,e)=>fr(a)+" × 10<sup>"+e+"</sup>";
+  return {q:"Quelle est l’écriture scientifique de "+plain+" ?",o:u4([s(m,x),s(m,x+1),s(m,x-1),s(m,-x)]),r:0,e:"On place la virgule après le premier chiffre non nul : "+s(m,x)+"."}},
+ ()=>{const t=pick([["0,0450",3],["12,30",4],["0,0072",2],["3,00 × 10<sup>8</sup>",3],["1,020",4],["25,0",3],["0,500",3],["6,02 × 10<sup>23</sup>",3],["0,00304",3],["7,5",2]]),c=t[1];
+  return {q:"Combien de chiffres significatifs possède "+t[0]+" ?",o:u4([String(c),String(c+1),String(c-1),String(c+2)]),r:0,e:"Les zéros à gauche ne comptent pas ; les zéros à droite après la virgule comptent : "+c+" chiffres significatifs."}},
+ ()=>{let X,n,d,r;do{X=Math.floor(rng()*900000)+100000;n=pick([1,2,3]);d=Math.pow(10,5-n);r=X%d}while(r*2===d);
+  const up=Math.floor(X/d)+(r*2>d?1:0),u=Math.pow(10,n),f=(k,k2)=>(k/Math.pow(10,k2)).toFixed(k2).replace(".",","),c=f(up,n);
+  return {q:"Arrondir "+f(X,5)+" à "+n+" décimale"+(n>1?"s":"")+".",o:u4([c,f(Math.floor(X/d),n),f(up+1,n),f(up-1,n),f(Math.round(X/d*10)/10*0+Math.round(X/(d/10)),n+1)]),r:0,e:"On regarde le chiffre suivant : s’il vaut 5 ou plus, on augmente le dernier chiffre conservé ("+c+")."}},
+ ()=>{const h=pick([1,2,3,4,5]),m=pick([10,15,20,30,45]),a=60*h+m;
+  return {q:"Convertir "+h+" h "+m+" min en minutes.",o:u4([a+" min",(100*h+m)+" min",(60*h)+" min",(a+60)+" min"]),r:0,e:h+" × 60 + "+m+" = "+a+" min."}},
+ ()=>{let a,b,r;do{a=pick([245,318,572,136,407,283]);b=pick([12,25,34,48,15,36]);r=a*b}while(r%100===50||r%1000===500);
+  const P=r/1000,fx=(x,k)=>x.toFixed(k).replace(".",","),c2=r<10000?fx(Math.round(r/100)/10,1):fx(Math.round(r/1000),0),c3=r<10000?fx(Math.round(r/10)/100,2):fx(Math.round(r/100)/10,1);
+  return {q:"On calcule "+fx(a/100,2)+" × "+fx(b/10,1)+" (données à 3 et 2 chiffres significatifs). Quel résultat faut-il donner ?",o:u4([c2,c3,fx(P,3),fx(Math.round(P),0),fx(P,1),fx(P,2)]),r:0,e:"Le résultat a autant de chiffres significatifs que la donnée la moins précise : 2, soit "+c2+"."}},
+ ()=>{let X,Y;do{X=pick([123,47,251,86]);Y=pick([456,1234,78,2719]);}while((X*100+Y)%100===50);
+  const S=X*100+Y,fx=(v,k)=>(v).toFixed(k).replace(".",","),a=Math.round(S/100)/10;
+  return {q:"Calculer "+fx(X/10,1)+" + "+fx(Y/1000,3)+" avec le bon nombre de décimales.",o:u4([fx(a,1),fx(S/1000,3),fx(Math.round(S/10)/100,2),fx(Math.round(S/1000),0)]),r:0,e:"Pour une somme, on garde autant de décimales que la donnée qui en a le moins (1) : "+fx(a,1)+"."}}
+];
+/* ====== Fin de la zone à modifier ====== */
+
+const $=id=>document.getElementById(id);
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const mulberry=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+let rng=Math.random;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(rng()*a.length)];
+const fr=x=>String(x).replace(".",",");
+const L="ABCDEF";
+const plain=h=>h.replace(/<sup>(.*?)<\/sup>/g,"^$1").replace(/<sub>(.*?)<\/sub>/g,"$1").replace(/<[^>]+>/g,"");
+const ascii=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\x20-\x7e]/g,"?");
+let items=[],ans=[],cur=0,id={},seed=0,code="",active=false,reloaded=false,stopped=false,timeouts=0,tmr=null,fsOk=false,reseau=0;
+const away={count:0,secs:0,since:0};
+const okAt=i=>ans[i]!==null&&items[i].o[ans[i]].ok;
+const flags=()=>{const f=[];if(away.count)f.push("SORTIES:"+away.count+"/"+away.secs+"s");if(reseau)f.push("RESEAU:"+reseau);if(derog)f.push("DEROG");if(!fsOk)f.push("SANS-PLEIN-ECRAN");if(reloaded)f.push("REPRISE");if(stopped)f.push("ARRET-AUTO");if(timeouts)f.push("TEMPS-ECOULE:"+timeouts);return f.join(" ")||"RAS"};
+
+document.title="TEST n°"+NUMERO+" · "+CHAPITRE;
+$("title").textContent="TEST n°"+NUMERO+" · "+CHAPITRE;
+$("by").textContent="By "+AUTEUR+" pour "+ETABLISSEMENT+" · Version du "+VERSION;
+$("meta").textContent=NB_QUESTIONS+" questions personnelles · une seule bonne réponse · pas de retour en arrière"+(DUREE_QUESTION?" · "+DUREE_QUESTION+" s par question":"")+". Quitter la page, copier-coller et recharger sont détectés et signalés à l’enseignant. Après "+MAX_SORTIES+" sorties, le test s’arrête. Le test se déroule en plein écran, Wi-Fi, données mobiles et Bluetooth coupés.";
+$("mail").textContent=EMAIL;
+CLASSES.forEach(c=>{const o=document.createElement("option");o.value=o.textContent=c;$("classe").appendChild(o)});
+let derog=false;
+const netOk=()=>!RESEAU_COUPE_OBLIGATOIRE||!navigator.onLine||derog;
+let mdpOk=!MOT_DE_PASSE_ACTIF;
+const ready=()=>{$("go").disabled=!($("nom").value.trim()&&$("prenom").value.trim()&&$("classe").value&&netOk()&&mdpOk)};
+function netState(){
+  $("net").hidden=!RESEAU_COUPE_OBLIGATOIRE;
+  const on=navigator.onLine;
+  $("net").textContent=on?(derog?"Dérogation de l’enseignant acceptée.":"⚠ Réseau détecté : avant de commencer, passe en mode avion (Wi-Fi, données mobiles et Bluetooth coupés)."):"✓ Réseau coupé : tu peux commencer.";
+  $("net").style.color=on&&!derog?"var(--ko)":"var(--ok)";
+  ready();
+}
+window.addEventListener("online",netState);window.addEventListener("offline",netState);
+$("dg").onclick=()=>{if($("dcode").value.trim()===CODE_DEROGATION)derog=true;netState()};
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+async function verifMdp(){
+  const v=$("mdp").value.trim(),p="qcm|"+v;
+  try{mdpOk=!MOT_DE_PASSE_ACTIF||(window.crypto&&crypto.subtle?(await sha(p))===MDP_SHA256:hash(p)===MDP_FNV)}catch(e){mdpOk=hash(p)===MDP_FNV}
+  $("mdpmsg").textContent=MOT_DE_PASSE_ACTIF&&mdpOk&&v?"✓ Mot de passe accepté":"";
+  ready();
+}
+$("mdp").addEventListener("input",verifMdp);
+$("mdp").addEventListener("change",()=>{if(MOT_DE_PASSE_ACTIF&&!mdpOk&&$("mdp").value)$("mdpmsg").textContent="✗ Mot de passe incorrect"});
+if(!MOT_DE_PASSE_ACTIF)document.querySelector('label[for="mdp"]').hidden=$("mdp").hidden=true;
+["nom","prenom"].forEach(i=>$(i).addEventListener("input",ready));$("classe").addEventListener("change",ready);
+
+function show(s){["s-id","s-quiz","s-qr","s-pdf"].forEach(x=>$(x).classList.toggle("hide",x!==s));window.scrollTo(0,0)}
+
+$("go").onclick=()=>{
+  id={nom:$("nom").value.trim().toUpperCase(),prenom:$("prenom").value.trim(),classe:$("classe").value};
+  seed=hash(NUMERO+"|"+ascii(id.nom).toLowerCase()+"|"+ascii(id.prenom).toLowerCase()+"|"+id.classe);rng=mulberry(seed);
+  code=seed.toString(36).toUpperCase().padStart(6,"0").slice(0,6);
+  const pool=[...QUESTIONS.map((x,i)=>({...x,n:"S"+(i+1)})),...GENERATEURS.map((g,i)=>({...g(),n:"G"+(i+1)}))];
+  items=shuffle(pool).slice(0,NB_QUESTIONS).map(x=>{const o=x.o.map((t,i)=>({t,ok:i===x.r}));return {n:x.n,q:x.q,e:x.e,o:MELANGER_REPONSES?shuffle(o):o}});
+  ans=items.map(()=>null);cur=0;away.count=away.secs=away.since=0;timeouts=0;stopped=false;reloaded=false;
+  try{const k="t"+NUMERO+"_"+code;if(localStorage.getItem(k))reloaded=true;localStorage.setItem(k,"1")}catch(e){}
+  reseau=0;fsOk=false;unlockAudio();enterFs();active=true;show("s-quiz");render();startTimer();
+};
+function render(){
+  const it=items[cur],n=items.length;
+  $("count").textContent="Question "+(cur+1)+" / "+n;
+  $("fill").style.width=((cur+1)/n*100)+"%";
+  $("q").innerHTML=it.q;
+  const box=$("opts");box.innerHTML="";
+  it.o.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"+(ans[cur]===i?" sel":"");
+    b.setAttribute("aria-pressed",ans[cur]===i);
+    b.innerHTML="<b>"+L[i]+"</b><span>"+o.t+"</span>";
+    b.onclick=()=>{ans[cur]=i;render()};
+    box.appendChild(b);
+  });
+  $("next").textContent=cur===n-1?"Terminer le test":"Question suivante";
+  $("next").disabled=ans[cur]===null;
+}
+function advance(){try{speechSynthesis.cancel()}catch(e){}if(cur<items.length-1){cur++;render();startTimer();window.scrollTo(0,0)}else finish()}
+$("next").onclick=advance;
+function startTimer(){
+  clearInterval(tmr);$("tmw").classList.toggle("hide",!DUREE_QUESTION);
+  if(!DUREE_QUESTION)return;
+  let t=DUREE_QUESTION;$("tm").style.width="100%";
+  tmr=setInterval(()=>{t--;$("tm").style.width=(t/DUREE_QUESTION*100)+"%";if(t<=0){clearInterval(tmr);if(ans[cur]===null)timeouts++;advance()}},1000);
+}
+
+let pts=0;
+function finish(){
+  clearInterval(tmr);active=false;$("warn").classList.add("hide");$("calc").classList.add("hide");try{speechSynthesis.cancel()}catch(e){}
+  try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}
+  if(away.since){away.secs+=Math.round((Date.now()-away.since)/1000);away.since=0}
+  pts=items.reduce((s,it,i)=>s+(okAt(i)?1:0),0);
+  const n=items.length,note=String(Math.round(pts/n*40)/2).replace(".",",");
+  const detail=items.map((it,i)=>it.n+":"+(okAt(i)?1:0)).join(" ");
+  const payload=ascii("TEST "+NUMERO+" V"+code+"\n"+id.nom+" "+id.prenom+" "+id.classe+"\nScore "+pts+"/"+n+" ("+note+"/20)\n"+detail+"\n"+flags());
+  $("qr").innerHTML="";
+  try{new QRCode($("qr"),{text:payload,width:220,height:220,correctLevel:QRCode.CorrectLevel.L})}
+  catch(e){$("qr").textContent="QR-code indisponible : montre cet écran à ton enseignant."}
+  $("qrwho").textContent=id.nom+" "+id.prenom+" · "+id.classe+" · Version "+code+(stopped?" · Test arrêté automatiquement":"");
+  show("s-qr");
+}
+const pd=s=>String(s).replace(/[’‘]/g,"'").replace(/→/g,"->").replace(/≈/g,"~").replace(/[−–—]/g,"-").replace(/…/g,"...").replace(/Δ/g,"delta ").replace(/ρ/g,"rho").replace(/Ω/g,"ohm").replace(/π/g,"pi").replace(/[^ -~\u00a0-\u00ff\n]/g,"");
+function copieTexte(){
+  const n=items.length,note=String(Math.round(pts/n*40)/2).replace(".",",");
+  return "TEST n°"+NUMERO+" - "+id.nom+" "+id.prenom+" - "+id.classe+"\nScore : "+pts+"/"+n+" ("+note+"/20)\nVersion : "+code+" | Contrôle : "+flags()+"\n\n"+
+    items.map((it,i)=>(i+1)+". "+plain(it.q).slice(0,90)+"\n   Réponse : "+(ans[i]===null?"(aucune)":plain(it.o[ans[i]].t))+" ["+(okAt(i)?"JUSTE":"FAUX")+"]").join("\n");
+}
+$("suivant").onclick=()=>{
+  $("ml").href="mailto:"+EMAIL+"?subject="+encodeURIComponent("TEST "+NUMERO+" - "+id.nom+" "+id.prenom+" - "+id.classe)+"&body="+encodeURIComponent(copieTexte());
+  show("s-pdf");
+};
+$("cpy").onclick=async()=>{try{await navigator.clipboard.writeText(copieTexte());$("msg").textContent="Texte copié : colle-le dans un mail à "+EMAIL+"."}catch(e){$("msg").textContent="Copie impossible : fais des captures d’écran de ta copie."}};
+
+$("pdf").onclick=async()=>{
+  const m=$("msg");m.textContent="";
+  try{
+    const {jsPDF}=window.jspdf,d=new jsPDF({unit:"mm",format:"a4"});
+    const W=180;let y=20;
+    const line=(t,sz,b)=>{d.setFont("helvetica",b?"bold":"normal");d.setFontSize(sz);
+      d.splitTextToSize(pd(t),W).forEach(l=>{if(y>280){d.addPage();y=20}d.text(l,15,y);y+=sz*0.5})};
+    const n=items.length,note=String(Math.round(pts/n*40)/2).replace(".",",");
+    line("TEST n°"+NUMERO+" - "+CHAPITRE,16,1);y+=3;
+    line("NOM : "+id.nom+"   PRÉNOM : "+id.prenom+"   CLASSE : "+id.classe,11);
+    line("Score : "+pts+" / "+n+"  (soit "+note+" / 20)",11,1);
+    line("Version du test : "+code+"  |  Contrôle : "+flags(),9);y+=5;
+    items.forEach((it,i)=>{
+      const ok=okAt(i),bonne=it.o.find(o=>o.ok);
+      line((i+1)+". "+plain(it.q),11,1);
+      line("Réponse de l’élève : "+(ans[i]===null?"(aucune réponse)":plain(it.o[ans[i]].t))+(ok?"  [JUSTE]":"  [FAUX]"),10);
+      if(!ok)line("Bonne réponse : "+plain(bonne.t),10);
+      line("Explication : "+plain(it.e),9);y+=4;
+    });
+    const buf=d.output("arraybuffer");
+    const fn=ascii("TEST_"+NUMERO+"_"+id.nom+"_"+id.prenom+".pdf").replace(/\s+/g,"_");
+    const dl=(window.claude&&claude.use)?await claude.use("downloads"):null;
+    if(dl)await dl.save({filename:fn,data:buf});else d.save(fn);
+    m.textContent="PDF enregistré. Envoie-le maintenant par mail.";
+  }catch(e){m.textContent=(e&&e.code==="declined")?"Enregistrement annulé. Clique à nouveau pour réessayer.":"Impossible de générer le PDF ("+((e&&(e.code||e.message))||"erreur")+"). Utilise la solution de secours ci-dessous."}
+};
+
+/* ===== Anti-triche : détection, pas blocage total ===== */
+function leave(){if(!active||away.since)return;away.since=Date.now();away.count++;alarm()}
+function back(){
+  if(!away.since)return;
+  away.secs+=Math.round((Date.now()-away.since)/1000);away.since=0;
+  if(!active)return;
+  if(away.count>=MAX_SORTIES){stopped=true;active=false;clearInterval(tmr);showAlert("⛔ TEST ARRÊTÉ","Tu as quitté la page "+away.count+" fois. Le test est arrêté et ton enseignant sera prévenu.","Voir mon QR-code");return}
+  showAlert("⚠ ALERTE : sortie de la page ("+away.count+"/"+MAX_SORTIES+")","Cette sortie est enregistrée et visible par ton enseignant. À la sortie n°"+MAX_SORTIES+", le test s’arrête.","Reprendre le test");
+}
+let ac=null;
+function unlockAudio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){}}
+function alarm(){
+  try{if(ac){ac.resume();for(let i=0;i<6;i++){const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*0.35;o.type="square";o.frequency.value=i%2?660:880;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.25,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.3);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+0.32)}}}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate([300,100,300,100,300])}catch(e){}
+}
+function showAlert(t,m,b){$("warnt").textContent=t;$("warnm").textContent=m;$("warnb").textContent=b;$("warn").classList.remove("hide");alarm()}
+$("warnb").onclick=()=>{$("warn").classList.add("hide");if(stopped)finish();else enterFs()};
+document.addEventListener("visibilitychange",()=>document.hidden?leave():back());
+window.addEventListener("blur",leave);window.addEventListener("focus",back);
+["copy","cut","paste","contextmenu","dragstart","selectstart"].forEach(ev=>document.addEventListener(ev,e=>{if(active)e.preventDefault()}));
+document.addEventListener("keydown",e=>{if(!active)return;const k=e.key.toLowerCase(),c=e.ctrlKey||e.metaKey;if((c&&"cxvaspuf".includes(k))||e.key==="F12"||(c&&e.shiftKey&&"ijc".includes(k)))e.preventDefault()});
+window.addEventListener("beforeunload",e=>{if(active){e.preventDefault();e.returnValue=""}});
+
+/* ===== Vocal et calculatrice ===== */
+const oral=h=>String(h).replace(/<sup>(.*?)<\/sup>/g,(m,a)=>" exposant "+a.replace(/^-/,"moins ").replace(/^\+$/,"plus")+" ").replace(/<sub>(.*?)<\/sub>/g,(m,a)=>" "+a+" ").replace(/<[^>]+>/g,"").replace(/×/g," fois ").replace(/≈/g," environ ").replace(/=/g," égale ").replace(/\//g," par ").replace(/\s+/g," ").trim();
+function parle(txt){try{const s=window.speechSynthesis;s.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang="fr-FR";u.rate=0.95;const v=s.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith("fr"));if(v)u.voice=v;s.speak(u)}catch(e){}}
+if(!VOCAL)$("speak").hidden=true;
+$("speak").onclick=()=>{const s=window.speechSynthesis;if(!s||typeof SpeechSynthesisUtterance==="undefined"){$("speak").textContent="🔇 Vocal indisponible sur cet appareil";return}if(s.speaking){s.cancel();return}const it=items[cur];parle(oral(it.q)+". "+it.o.map((o,i)=>"Réponse "+L[i]+" : "+oral(o.t)).join(". ")+".")};
+
+if(!CALCULATRICE)$("calcb").hidden=true;
+const calc={e:"",done:false,ans:0};
+const fmtN=r=>{if(!isFinite(r))throw 0;if(r===0)return"0";const a=Math.abs(r);if(a>=1e10||a<1e-4){const [m,x]=r.toExponential(8).split("e");return String(Number(m)).replace(".",",")+"×10^"+Number(x)}return String(Number(r.toPrecision(10))).replace(".",",")};
+function calcEval(src){
+  const clean=src.replace(/\s/g,"").replace(/,/g,"."),t=clean.match(/\d+\.?\d*|\.\d+|[+\-×÷^()√π]|ans/g)||[];
+  if(t.join("")!==clean)throw 0;
+  let i=0;const peek=()=>t[i],nx=()=>t[i++];
+  const expr=()=>{let v=term();while(peek()==="+"||peek()==="-"){const o=nx(),r=term();v=o==="+"?v+r:v-r}return v};
+  const term=()=>{let v=unary();for(;;){const p=peek();if(p==="×"||p==="÷"){nx();const r=unary();v=p==="×"?v*r:v/r}else if(p&&(p==="("||p==="√"||p==="π"||p==="ans"||/^\d|^\./.test(p))){v*=unary()}else break}return v};
+  const unary=()=>{if(peek()==="-"){nx();return -unary()}if(peek()==="+"){nx();return unary()}return pow()};
+  const pow=()=>{const b=atom();if(peek()==="^"){nx();return Math.pow(b,unary())}return b};
+  const atom=()=>{const p=nx();if(p===undefined)throw 0;if(p==="("){const v=expr();if(peek()===")")nx();return v}if(p==="√"){const v=atom();if(v<0)throw 0;return Math.sqrt(v)}if(p==="π")return Math.PI;if(p==="ans")return calc.ans;const n=parseFloat(p);if(isNaN(n))throw 0;return n};
+  const v=expr();if(i<t.length)throw 0;return v;
+}
+function calcKey(k){
+  if(k==="C"){calc.e="";calc.done=false;$("ch").textContent=""}
+  else if(k==="⌫"){if(calc.done){calc.e="";calc.done=false}else calc.e=calc.e.slice(0,-1)}
+  else if(k==="="){try{const r=calcEval(calc.e);$("ch").textContent=calc.e+" =";calc.ans=r;calc.e=fmtN(r)}catch(x){$("ch").textContent="";calc.e="Erreur"}calc.done=true}
+  else{
+    if(calc.done){if(calc.e==="Erreur"||!["+","-","×","÷","^","×10^","^2"].includes(k))calc.e="";calc.done=false}
+    calc.e+=k;
+  }
+  $("cd").textContent=calc.e||"0";
+}
+[["C","C","op"],["⌫","⌫","op"],["(","("],[")",")"],["7","7"],["8","8"],["9","9"],["÷","÷","op"],["4","4"],["5","5"],["6","6"],["×","×","op"],["1","1"],["2","2"],["3","3"],["−","-","op"],["0","0"],[",",","],["=","=","eq"],["+","+","op"],["^","^","op"],["√","√","op"],["π","π"],["×10ˣ","×10^","op"],["Ans","ans"],["x²","^2","op"],["10ˣ","10^","op"]]
+  .forEach(([l,v,c])=>{const b=document.createElement("button");b.type="button";b.textContent=l;if(c)b.className=c;b.onclick=()=>calcKey(v);$("ck").appendChild(b)});
+$("calcb").onclick=()=>$("calc").classList.toggle("hide");
+$("cx").onclick=()=>$("calc").classList.add("hide");
+
+/* ===== Plein écran et réseau ===== */
+function enterFs(){try{const el=document.documentElement,f=el.requestFullscreen||el.webkitRequestFullscreen;if(!f)return;const p=f.call(el);if(p&&p.then)p.then(()=>{fsOk=true}).catch(()=>{});else fsOk=true}catch(e){}}
+function incident(what){
+  if(!active)return;
+  away.count++;
+  if(away.count>=MAX_SORTIES){stopped=true;active=false;clearInterval(tmr);showAlert("⛔ TEST ARRÊTÉ",what+" Le test est arrêté et ton enseignant sera prévenu.","Voir mon QR-code");return}
+  showAlert("⚠ ALERTE ("+away.count+"/"+MAX_SORTIES+")",what+" Incident enregistré et visible par ton enseignant. À l’incident n°"+MAX_SORTIES+", le test s’arrête.","Reprendre le test");
+}
+const fsOff=()=>{if(active&&fsOk&&!document.fullscreenElement&&!document.webkitFullscreenElement)incident("Tu as quitté le plein écran.")};
+document.addEventListener("fullscreenchange",fsOff);document.addEventListener("webkitfullscreenchange",fsOff);
+window.addEventListener("online",()=>{if(active&&RESEAU_COUPE_OBLIGATOIRE){reseau++;incident("Une connexion réseau (Wi-Fi, données mobiles ou Bluetooth) a été détectée.")}});
+netState();
+</script>
+</body>
+</html>
